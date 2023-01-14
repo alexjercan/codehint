@@ -3,14 +3,14 @@
 # CodeHint
 ##### Get the best hints for the bugs in your code.
 
-![https://i.imgur.com/Cl8hOJT.png](fix)
+![fix](https://i.imgur.com/Cl8hOJT.png)
 
 </div>
 
 ## ⇁ Installation
 * neovim 0.9.0+ required
-* lua-curl is required [https://github.com/Lua-cURL/Lua-cURLv3](Lua-cURLv3)
-* lua-cjson is required [https://www.kyne.com.au/~mark/software/lua-cjson-manual.html](lua-cjson)
+* lua-curl is required [Lua-cURLv3](https://github.com/Lua-cURL/Lua-cURLv3)
+* lua-cjson is required [lua-cjson](https://www.kyne.com.au/~mark/software/lua-cjson-manual.html)
 * install using your favorite plugin manager (`packer` in this example)
 ```vim
 use 'alexjercan/codehint'
