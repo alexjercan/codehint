@@ -1,7 +1,8 @@
 local json = require('cjson')
 local cURL = require("cURL")
 
-local api_key_path = "/home/alex/.codexrc"
+local data_path = vim.fn.stdpath("data")
+local api_key_path = string.format("%s/.codexrc", data_path)
 
 local function repr(str)
     return string.format("%q", str):gsub("\\\n", "\\n")
