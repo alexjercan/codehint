@@ -52,7 +52,7 @@ with 256 maximum tokens, a temperature of 0.5 and top_p of 1.
   since the prompt adds a `// Fixme` comment on the line that the user is on
   and then it adds the `Q:  Propose a hint that can help me fix the bug`
   question and `A:` part at the end of the file to make up the prompt.
-* Since I had some trouple installing the lua modules I kinda wish to not
+* Since I had some trouble installing the lua modules I kinda wish to not
   depend on them and maybe be able to not use them, but in the meanwhile:
     - I needed to install `libcurl4-gnutls-dev` for the lua-curl module to have
       the lib for curl
