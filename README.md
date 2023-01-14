@@ -3,6 +3,8 @@
 # CodeHint
 ##### Get the best hints for the bugs in your code.
 
+![https://i.imgur.com/Cl8hOJT.png](fix)
+
 </div>
 
 ## ⇁ Installation
