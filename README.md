@@ -3,9 +3,11 @@
 # CodeHint
 ##### Get the best hints for the bugs in your code.
 
-![fix](https://i.imgur.com/Cl8hOJT.png)
-
+[![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
+[![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 </div>
+
+![bugfix](https://i.imgur.com/Cl8hOJT.png)
 
 ## ⇁ Installation
 * neovim 0.9.0+ required
