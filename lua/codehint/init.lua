@@ -1,11 +1,20 @@
-local json = require("cjson")
-local cURL = require("cURL")
-
 local data_path = vim.fn.stdpath("data")
 local api_key_path = string.format("%s/.codexrc", data_path)
 
 local function repr(str)
     return string.format("%q", str):gsub("\\\n", "\\n")
+end
+
+local function parse(str)
+    local text_start_index, _ = string.find(str, '"text":"')
+    if text_start_index then
+        local text_start = text_start_index + 8
+        local text_end = string.find(str, '"', text_start) - 1
+        local first_text = string.sub(str, text_start, text_end)
+        return first_text:gsub("\\n", "\n")
+    else
+        return nil
+    end
 end
 
 local function get_key()
@@ -56,34 +65,26 @@ M.hint = function()
     local astr = string.format("%s A:", comment)
     table.insert(lines, qstr)
     table.insert(lines, astr)
-    local prompt = table.concat(lines, "\n")
+    local prompt = repr(table.concat(lines, "\n"))
 
-    local headers = {
-        "Content-Type: application/json",
-        string.format("Authorization: Bearer %s", key),
-    }
-
-    local body = string.format(
-        '{"model": "code-davinci-002", "prompt": %s, "max_tokens": 256, "temperature": 0.5, "top_p": 1}',
-        repr(prompt)
+    local curl = (
+        'curl https://api.openai.com/v1/completions -H \'Content-Type: application/json\' -H "Authorization: Bearer '
+        .. key
+        .. '" -d \'{"model": "code-davinci-002", "prompt": '
+        .. prompt
+        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent'
     )
 
-    local url = "https://api.openai.com/v1/completions"
+    local handle = io.popen(curl)
+    if handle ~= nil then
+        local result = handle:read("*a")
+        handle:close()
 
-    cURL.easy({
-        url = url,
-        post = true,
-        httpheader = headers,
-        postfields = body,
-        writefunction = function(str)
-            local tab = json.decode(str)
-            print(
-                string.format("%s\n%s%s", qstr, astr, tab["choices"][1]["text"])
-            )
-        end,
-    })
-        :perform()
-        :close()
+        result = parse(result)
+        if result ~= nil then
+            print(string.format("%s\n%s%s", qstr, astr, result))
+        end
+    end
 end
 
 return M

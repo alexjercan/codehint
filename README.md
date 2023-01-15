@@ -11,8 +11,7 @@
 
 ## ⇁ Installation
 * neovim 0.9.0+ required
-* lua-curl is required [Lua-cURLv3](https://github.com/Lua-cURL/Lua-cURLv3)
-* lua-cjson is required [lua-cjson](https://www.kyne.com.au/~mark/software/lua-cjson-manual.html)
+* curl 7.87.0+ required
 * install using your favorite plugin manager (`packer` in this example)
 ```vim
 use 'alexjercan/codehint'
@@ -56,20 +55,3 @@ with 256 maximum tokens, a temperature of 0.5 and top_p of 1.
   since the prompt adds a `// Fixme` comment on the line that the user is on
   and then it adds the `Q:  Propose a hint that can help me fix the bug`
   question and `A:` part at the end of the file to make up the prompt.
-* Since I had some trouble installing the lua modules I kinda wish to not
-  depend on them and maybe be able to not use them, but in the meanwhile:
-    - I needed to install `libcurl4-gnutls-dev` for the lua-curl module to have
-      the lib for curl
-    - Then to install lua-curl I used `sudo luarocks install lua-curl
-      CURL_INCDIR=/usr/include/x86_64-linux-gnu/` usually the libs will be
-      installed in `/usr/include` so search there for `curl.h` with something
-      like `find /usr/ | grep curl.h`
-    - Then I installed `lua-cjson` using `sudo luarocks install lua-cjson`
-      which worked first try
-    - After this it should work to just require the `codehint` module
-
-```console
-sudo apt install libcurl4-gnutls-dev luarocks
-sudo luarocks install lua-curl CURL_INCDIR=/usr/include/x86_64-linux-gnu/
-sudo luarocks install lua-cjson
-```
