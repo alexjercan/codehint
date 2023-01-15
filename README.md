@@ -18,7 +18,7 @@
 use 'alexjercan/codehint'
 ```
 
-## Setup
+## ⇁ Setup
 
 To setup the `codehint` plugin you need an OpenAI account and an api key. Then
 you have to call the setup function for the plugin and provide the api key in
