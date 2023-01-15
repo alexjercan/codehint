@@ -1,22 +1,6 @@
 local data_path = vim.fn.stdpath("data")
 local api_key_path = string.format("%s/.codexrc", data_path)
 
-local function repr(str)
-    return string.format("%q", str):gsub("\\\n", "\\n")
-end
-
-local function parse(str)
-    local text_start_index, _ = string.find(str, '"text":"')
-    if text_start_index then
-        local text_start = text_start_index + 8
-        local text_end = string.find(str, '"', text_start) - 1
-        local first_text = string.sub(str, text_start, text_end)
-        return first_text:gsub("\\n", "\n")
-    else
-        return nil
-    end
-end
-
 local function get_key()
     local file = io.open(api_key_path, "r")
 
@@ -65,25 +49,23 @@ M.hint = function()
     local astr = string.format("%s A:", comment)
     table.insert(lines, qstr)
     table.insert(lines, astr)
-    local prompt = repr(table.concat(lines, "\n"))
+    local prompt = table.concat(lines, "\n")
+    prompt = string.format("%q", prompt):gsub("\\\n", "\\n")
 
     local curl = (
         "curl https://api.openai.com/v1/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer "
         .. key
         .. '\' -d \'{"model": "code-davinci-002", "prompt": '
         .. prompt
-        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent'
+        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent| jq \'.choices[]\'.text'
     )
 
     local handle = io.popen(curl)
     if handle ~= nil then
         local result = handle:read("*a")
         handle:close()
-
-        result = parse(result)
-        if result ~= nil then
-            print(string.format("%s\n%s%s", qstr, astr, result))
-        end
+        result = string.sub(result, 2, -3):gsub("\\n", "\n"):gsub('\\"', '"')
+        print(string.format("%s\n%s%s", qstr, astr, result))
     end
 end
 
