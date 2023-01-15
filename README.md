@@ -67,3 +67,9 @@ with 256 maximum tokens, a temperature of 0.5 and top_p of 1.
     - Then I installed `lua-cjson` using `sudo luarocks install lua-cjson`
       which worked first try
     - After this it should work to just require the `codehint` module
+
+```console
+sudo apt install libcurl4-gnutls-dev luarocks
+sudo luarocks install lua-curl CURL_INCDIR=/usr/include/x86_64-linux-gnu/
+sudo luarocks install lua-cjson
+```
