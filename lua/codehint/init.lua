@@ -68,9 +68,9 @@ M.hint = function()
     local prompt = repr(table.concat(lines, "\n"))
 
     local curl = (
-        "curl https://api.openai.com/v1/completions -H 'Content-Type: application/json' -H \"Authorization: Bearer "
+        "curl https://api.openai.com/v1/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer "
         .. key
-        .. '" -d \'{"model": "code-davinci-002", "prompt": '
+        .. '\' -d \'{"model": "code-davinci-002", "prompt": '
         .. prompt
         .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent'
     )
