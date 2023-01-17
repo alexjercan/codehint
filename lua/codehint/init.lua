@@ -1,3 +1,6 @@
+local Util = require("codehint.util")
+local Comment = Util.Comment
+
 local data_path = vim.fn.stdpath("data")
 local api_key_path = string.format("%s/.codexrc", data_path)
 
@@ -36,9 +39,12 @@ end
 M.hint = function()
     local key = get_key()
 
-    local comment = "//"
-    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    local line = vim.api.nvim_win_get_cursor(0)[1]
+    local comment = Comment.get_comment()
+    local buffer = vim.api.nvim_get_current_buf()
+    local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
+
+    local win = vim.api.nvim_get_current_win()
+    local line = vim.api.nvim_win_get_cursor(win)[1]
 
     lines[line] = table.concat({ lines[line], comment, "Fixme" }, " ")
 
@@ -57,7 +63,7 @@ M.hint = function()
         .. key
         .. '\' -d \'{"model": "code-davinci-002", "prompt": '
         .. prompt
-        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent| jq \'.choices[]\'.text'
+        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent | jq \'.choices[]\'.text'
     )
 
     local handle = io.popen(curl)
