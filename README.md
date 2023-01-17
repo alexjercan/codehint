@@ -14,8 +14,11 @@
 * curl 7.87.0+ required
 * jq 1.6+ required
 * install using your favorite plugin manager (`packer` in this example)
-```vim
-use 'alexjercan/codehint'
+```lua
+use {
+    'alexjercan/codehint',
+    requires = { { 'nvim-treesitter/nvim-treesitter' } }
+}
 ```
 
 ## ⇁ Setup
@@ -45,6 +48,15 @@ This plugin makes use of the Codex API from OpenAI and uses the
 code-davinci-002 model. I have setup the default parameters from the playground,
 with 256 maximum tokens, a temperature of 0.5 and top_p of 1.
 
+The plugin works by taking the text from the current buffer. Then it adds a
+comment with the string `Fixme` on the line where the cursor is. And then it
+adds the `Q:  Propose a hint that can help me fix the bug` question and `A:`
+part at the end of the file to make up the prompt. It then uses the CodexAPI to
+get a response and shows it.
+
+The plugin uses [tree-sitter](https://tree-sitter.github.io/tree-sitter/) to
+identify the programming langauge and use the correct comment.
+
 ## ⇁ Vim Config
 
 For now all the options are hardcoded, but if needed I will make then
@@ -63,12 +75,5 @@ vim.keymap.set("n", "<leader>h", codehint.hint)
 
 ## ⇁ Limitations
 
-* The plugin works only for C++ sources at the moment because I have hardcoded
-  the comment to be a // (so I mean it works for any language that has the
-  comment like //). I plan to make it work for any language but I have to
-  figure out how to detect the language used or what comment should be used for
-  the current buffer.
 * I don't know if the AI can be confused by multiple fixme comment in the code,
-  since the prompt adds a `// Fixme` comment on the line that the user is on
-  and then it adds the `Q:  Propose a hint that can help me fix the bug`
-  question and `A:` part at the end of the file to make up the prompt.
+  since the prompt adds a `// Fixme` comment in the code as part of the prompt.
