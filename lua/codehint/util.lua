@@ -1,5 +1,5 @@
-local config = require('codehint.config')
-local parsers = require('nvim-treesitter.parsers')
+local config = require("codehint.config")
+local parsers = require("nvim-treesitter.parsers")
 
 local Comment = {}
 
