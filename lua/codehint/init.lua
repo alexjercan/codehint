@@ -1,5 +1,6 @@
 local Util = require("codehint.util")
 local Comment = Util.Comment
+local Hint = Util.Hint
 
 local data_path = vim.fn.stdpath("data")
 local api_key_path = string.format("%s/.codexrc", data_path)
@@ -57,42 +58,9 @@ M.hint = function()
     local win = vim.api.nvim_get_current_win()
     local line = vim.api.nvim_win_get_cursor(win)[1]
 
-    lines[line] = table.concat({ lines[line], comment, "Fixme" }, " ")
+    local output = Hint.run(lines, line, comment, key, M._CodehintConfig)
 
-    local qstr = string.format(
-        "%s Q: Propose a hint that can help me fix the bug",
-        comment
-    )
-    local astr = string.format("%s A:", comment)
-    table.insert(lines, qstr)
-    table.insert(lines, astr)
-    local prompt = table.concat(lines, "\n")
-
-    local payload = vim.json.encode({
-        model = "code-davinci-002",
-        prompt = prompt,
-        max_tokens = M._CodehintConfig.max_tokens,
-        temperature = M._CodehintConfig.temperature,
-        top_p = M._CodehintConfig.top_p,
-    })
-
-    local curl = (
-        "curl https://api.openai.com/v1/completions"
-        .. " -H 'Content-Type: application/json'"
-        .. string.format(" -H 'Authorization: Bearer %s'", key)
-        .. string.format(" -d '%s'", payload)
-        .. " --insecure --silent"
-    )
-    local handle = io.popen(curl)
-    if handle ~= nil then
-        local result = handle:read("*a")
-        handle:close()
-
-        local hint = vim.json.decode(result)["choices"][1]["text"]
-        local output = string.format("%s\n%s%s", qstr, astr, hint)
-
-        print(output)
-    end
+    print(output)
 end
 
 return M
