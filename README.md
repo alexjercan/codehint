@@ -14,20 +14,24 @@
 * curl 7.87.0+ required
 * install using your favorite plugin manager (`packer` in this example)
 ```lua
-use {
+use({
     'alexjercan/codehint',
     requires = { { 'nvim-treesitter/nvim-treesitter' } }
-}
+})
 ```
 
 ## ⇁ Setup
 
 To setup the `codehint` plugin you need an OpenAI account and an api key. Then
 you have to call the setup function for the plugin and provide the api key in
-the input menu.
+the input menu. Here is an example with the default values of the config:
 
 ```lua
-:lua require("codehint").setup({ max_tokens = 256, temperature = 0.5, top_p = 1 })
+require("codehint").setup({
+    max_tokens = 256,
+    temperature = 0.5,
+    top_p = 1,
+})
 ```
 
 ## ⇁ Code Hints
@@ -67,7 +71,11 @@ path at `~/.local/share/nvim/.codexrc`.
 ```lua
 local codehint = require("codehint")
 
-codehint.setup()
+codehint.setup({
+    max_tokens = 256,
+    temperature = 0.5,
+    top_p = 1,
+})
 
 vim.keymap.set("n", "<leader>h", codehint.hint)
 ```
