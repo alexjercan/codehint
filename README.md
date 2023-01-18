@@ -27,7 +27,7 @@ you have to call the setup function for the plugin and provide the api key in
 the input menu.
 
 ```lua
-:lua require("codehint").setup()
+:lua require("codehint").setup({ max_tokens = 256, temperature = 0.5, top_p = 1 })
 ```
 
 ## ⇁ Code Hints
