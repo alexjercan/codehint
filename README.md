@@ -62,8 +62,7 @@ identify the programming langauge and use the correct comment.
 
 ## ⇁ Vim Config
 
-For now all the options are hardcoded, but if needed I will make then
-changeable. An example of config can be seen below. It just maps the `leader` +
+An example of config can be seen below. It just maps the `leader` +
 `h` keys to call the hint function. And it calls for setup on, which will
 require the OpenAI API key to be entered. The key will be saved on the nvim
 path at `~/.local/share/nvim/.codexrc`.
