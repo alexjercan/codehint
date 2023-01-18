@@ -12,7 +12,6 @@
 ## ⇁ Installation
 * neovim 0.9.0+ required
 * curl 7.87.0+ required
-* jq 1.6+ required
 * install using your favorite plugin manager (`packer` in this example)
 ```lua
 use {

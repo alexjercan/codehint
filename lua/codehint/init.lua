@@ -63,14 +63,15 @@ M.hint = function()
         .. key
         .. '\' -d \'{"model": "code-davinci-002", "prompt": '
         .. prompt
-        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent | jq \'.choices[]\'.text'
+        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent'
     )
 
     local handle = io.popen(curl)
     if handle ~= nil then
         local result = handle:read("*a")
         handle:close()
-        result = string.sub(result, 2, -3):gsub("\\n", "\n"):gsub('\\"', '"')
+        result = vim.json.decode(result)
+        result = result["choices"][1]["text"]
         print(string.format("%s\n%s%s", qstr, astr, result))
     end
 end
