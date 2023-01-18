@@ -28,7 +28,18 @@ end
 
 local M = {}
 
-M.setup = function()
+M._CodehintConfig = {
+    max_tokens = 256,
+    temperature = 0.5,
+    top_p = 1,
+}
+
+M.setup = function(config)
+    if not config then
+        config = {}
+    end
+    M._CodehintConfig = vim.tbl_deep_extend("force", M._CodehintConfig, config)
+
     local key = get_key()
 
     if not key then
@@ -56,23 +67,31 @@ M.hint = function()
     table.insert(lines, qstr)
     table.insert(lines, astr)
     local prompt = table.concat(lines, "\n")
-    prompt = string.format("%q", prompt):gsub("\\\n", "\\n")
+
+    local payload = vim.json.encode({
+        model = "code-davinci-002",
+        prompt = prompt,
+        max_tokens = M._CodehintConfig.max_tokens,
+        temperature = M._CodehintConfig.temperature,
+        top_p = M._CodehintConfig.top_p,
+    })
 
     local curl = (
-        "curl https://api.openai.com/v1/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer "
-        .. key
-        .. '\' -d \'{"model": "code-davinci-002", "prompt": '
-        .. prompt
-        .. ', "max_tokens": 256, "temperature": 0.5, "top_p": 1 }\' --insecure --silent'
+        "curl https://api.openai.com/v1/completions"
+        .. " -H 'Content-Type: application/json'"
+        .. string.format(" -H 'Authorization: Bearer %s'", key)
+        .. string.format(" -d '%s'", payload)
+        .. " --insecure --silent"
     )
-
     local handle = io.popen(curl)
     if handle ~= nil then
         local result = handle:read("*a")
         handle:close()
-        result = vim.json.decode(result)
-        result = result["choices"][1]["text"]
-        print(string.format("%s\n%s%s", qstr, astr, result))
+
+        local hint = vim.json.decode(result)["choices"][1]["text"]
+        local output = string.format("%s\n%s%s", qstr, astr, hint)
+
+        print(output)
     end
 end
 
