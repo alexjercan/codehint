@@ -108,6 +108,9 @@ local config = {
         lua = {
             comment = "--",
         },
+        make = {
+            comment = "#",
+        },
         nix = {
             comment = "#",
         },
