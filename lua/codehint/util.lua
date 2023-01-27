@@ -11,7 +11,14 @@ function Comment.get_comment()
     local line = vim.api.nvim_win_get_cursor(win)[1]
 
     local language = parser:language_for_range({ line, 0, line, 0 }):lang()
-    return config.languages[language].comment
+    local language_config = config.languages[language]
+
+    if language_config then
+        return language_config.comment
+    end
+
+    -- TODO: Should probably debug log that the language is not supported
+    return ""
 end
 
 local Hint = {}
