@@ -31,6 +31,7 @@ require("codehint").setup({
     max_tokens = 256,
     temperature = 0.5,
     top_p = 1,
+    use_print = false,
 })
 ```
 
@@ -49,7 +50,10 @@ This should provide you with a Q&A message that displays the hint for your probl
 
 This plugin makes use of the Codex API from OpenAI and uses the
 code-davinci-002 model. I have setup the default parameters from the playground,
-with 256 maximum tokens, a temperature of 0.5 and top_p of 1.
+with 256 maximum tokens, a temperature of 0.5 and top_p of 1. The `use_print`
+option is used to decide wheater to use the print call and show the output in
+the command window or to use floats and show the option similar to LSP
+messages.
 
 The plugin works by taking the text from the current buffer. Then it adds a
 comment with the string `Fixme` on the line where the cursor is. And then it
@@ -74,6 +78,7 @@ codehint.setup({
     max_tokens = 256,
     temperature = 0.5,
     top_p = 1,
+    use_print = false,
 })
 
 vim.keymap.set("n", "<leader>h", codehint.hint)
