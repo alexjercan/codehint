@@ -33,6 +33,7 @@ M._CodehintConfig = {
     max_tokens = 256,
     temperature = 0.5,
     top_p = 1,
+    use_print = false,
 }
 
 M.setup = function(config)
@@ -60,7 +61,7 @@ M.hint = function()
 
     local output = Hint.run(lines, line, comment, key, M._CodehintConfig)
 
-    print(output)
+    Hint.show(output, M._CodehintConfig)
 end
 
 return M

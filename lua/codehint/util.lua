@@ -80,4 +80,35 @@ function Hint.run(lines, line, comment, key, opt)
     end
 end
 
+local function create_popup(message)
+    local lines = {}
+    local width = 0
+    for line in string.gmatch(message, "(.-)\r?\n") do
+        table.insert(lines, line)
+        width = math.max(width, #line)
+    end
+
+    local opts = {
+        relative = "cursor",
+        width = width + 10,
+        height = #lines,
+        col = 0,
+        row = -1,
+        anchor = "SW",
+    }
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+
+    vim.api.nvim_open_win(buf, true, opts)
+end
+
+function Hint.show(message, opt)
+    if opt.use_print then
+        print(message)
+    else
+        create_popup(message)
+    end
+end
+
 return { Comment = Comment, Hint = Hint }
