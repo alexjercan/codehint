@@ -61,23 +61,37 @@ function Hint.query(prompt, key, opt)
     end
 end
 
-function Hint.format(json, comment)
+function Hint.format(text, comment)
     return string.format(
         "%s %s\n%s %s%s",
         comment,
         Hint.Q,
         comment,
         Hint.A,
-        json["choices"][1]["text"]
+        text
     )
 end
 
 function Hint.run(lines, line, comment, key, opt)
     local prompt = Hint.make_prompt(lines, line, comment)
     local result = Hint.query(prompt, key, opt)
-    if result ~= nil then
-        return Hint.format(result, comment)
+
+    result = result["choices"]
+    if result == nil then
+        return nil
     end
+
+    result = result[1]
+    if result == nil then
+        return nil
+    end
+
+    result = result["text"]
+    if result == nil then
+        return nil
+    end
+
+    return Hint.format(result, comment)
 end
 
 local function create_popup(message)

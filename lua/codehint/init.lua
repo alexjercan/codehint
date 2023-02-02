@@ -61,7 +61,9 @@ M.hint = function()
 
     local output = Hint.run(lines, line, comment, key, M._CodehintConfig)
 
-    Hint.show(output, M._CodehintConfig)
+    if output ~= nil then
+        Hint.show(output, M._CodehintConfig)
+    end
 end
 
 return M
