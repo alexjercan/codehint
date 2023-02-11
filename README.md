@@ -9,6 +9,14 @@
 
 ![bugfix](https://i.imgur.com/Cl8hOJT.png)
 
+<div align="center">
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/0rjjgwFgHLU/0.jpg)](http://www.youtube.com/watch?v=0rjjgwFgHLU "AI Fixes Bugs")
+
+The demo for the plugin is available on my [YouTube](https://www.youtube.com/channel/UCQfbjXwtGuJ-7hDMmAm1-rA) channel.
+
+</div>
+
 ## ⇁ Installation
 * neovim 0.9.0+ required
 * curl 7.87.0+ required
