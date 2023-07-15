@@ -37,19 +37,15 @@ M.hint = function()
 
     if output ~= nil then
         local namespace = vim.api.nvim_create_namespace("codehint")
-        vim.diagnostic.set(
-            namespace,
-            buffer,
+        vim.diagnostic.set(namespace, buffer, {
             {
-                {
-                    lnum = 1,
-                    col = 1,
-                    end_lnum = 1,
-                    severity = vim.diagnostic.severity.HINT,
-                    message = output,
-                },
-            }
-        )
+                lnum = 1,
+                col = 1,
+                end_lnum = 1,
+                severity = vim.diagnostic.severity.HINT,
+                message = output,
+            },
+        })
     end
 end
 
