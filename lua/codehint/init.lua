@@ -1,48 +1,25 @@
-local Util = require("codehint.util")
-local Comment = Util.Comment
-local Hint = Util.Hint
-
-local data_path = vim.fn.stdpath("data")
-local api_key_path = string.format("%s/.codexrc", data_path)
-
-local function get_key()
-    local file = io.open(api_key_path, "r")
-
-    if file ~= nil then
-        local content = file:read("*a")
-        file:close()
-        return content
-    end
-
-    local content = vim.fn.input("OpenAI Key > ", "")
-    file = io.open(api_key_path, "w")
-
-    if not file then
-        return nil
-    end
-
-    file:write(content)
-    file:close()
-
-    return content
-end
+local Auth = require("codehint.auth").Auth
+local Hint = require("codehint.hint").Hint
 
 local M = {}
 
 M._CodehintConfig = {
-    max_tokens = 256,
-    temperature = 0.5,
-    top_p = 1,
-    use_print = false,
+    api = {
+        model = "gpt-3.5-turbo",
+        endpoint = "https://api.openai.com/v1/chat/completions",
+        system_prompt = "Propose a hint that can help me fix the bug",
+    },
+    use_env = false,
 }
 
 M.setup = function(config)
     if not config then
         config = {}
     end
+
     M._CodehintConfig = vim.tbl_deep_extend("force", M._CodehintConfig, config)
 
-    local key = get_key()
+    local key = Auth.auth(M._CodehintConfig.use_env)
 
     if not key then
         print("Could not setup codehint")
@@ -50,19 +27,29 @@ M.setup = function(config)
 end
 
 M.hint = function()
-    local key = get_key()
+    local key = Auth.auth(M._CodehintConfig.use_env)
 
-    local comment = Comment.get_comment()
     local buffer = vim.api.nvim_get_current_buf()
-    local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
+    local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, true)
+    local prompt = table.concat(lines, "\n")
 
-    local win = vim.api.nvim_get_current_win()
-    local line = vim.api.nvim_win_get_cursor(win)[1]
-
-    local output = Hint.run(lines, line, comment, key, M._CodehintConfig)
+    local output = Hint.generate(prompt, key, M._CodehintConfig.api)
 
     if output ~= nil then
-        Hint.show(output, M._CodehintConfig)
+        local namespace = vim.api.nvim_create_namespace("codehint")
+        vim.diagnostic.set(
+            namespace,
+            buffer,
+            {
+                {
+                    lnum = 1,
+                    col = 1,
+                    end_lnum = 1,
+                    severity = vim.diagnostic.severity.HINT,
+                    message = output,
+                },
+            }
+        )
     end
 end
 
