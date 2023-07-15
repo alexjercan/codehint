@@ -7,7 +7,7 @@
 [![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 </div>
 
-![bugfix](example)
+![bugfix](./resources/example.png)
 
 <div align="center">
 
