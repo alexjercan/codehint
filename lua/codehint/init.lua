@@ -58,7 +58,6 @@ M._CodehintConfig = {
     api = {
         model = "gpt-3.5-turbo",
         endpoint = "https://api.openai.com/v1/chat/completions",
-        system_prompt = SYSTEM,
     },
     use_env = false,
 }
@@ -84,7 +83,10 @@ M.hint = function()
     local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, true)
     local prompt = table.concat(lines, "\n")
 
-    local output = Hint.generate(prompt, key, M._CodehintConfig.api)
+    local api = M._CodehintConfig.api
+    api["system_prompt"] = SYSTEM
+
+    local output = Hint.generate(prompt, key, api)
 
     if output ~= nil then
         local bugs = output["bugs"]
