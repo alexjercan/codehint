@@ -69,6 +69,8 @@ api.
 
 The current system prompt used with ChatGPT is
 
+
+<pre>
 ```text
 You are an expert software  developer. Your job is to find the
 bugs in the given source code. First you have to provide a step by step
@@ -112,6 +114,7 @@ which requires an int. You can use the int function to fix that and use \
 }
 &#96;&#96;&#96;
 ```
+</pre>
 
 ## ⇁ Vim Config
 
