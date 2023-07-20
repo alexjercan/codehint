@@ -25,7 +25,7 @@ function Hint.generate(prompt, key, opt)
         return nil
     end
 
-    return content
+    return vim.json.decode(content)
 end
 
 return { Hint = Hint }
