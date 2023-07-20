@@ -34,7 +34,9 @@ Your output should be:
     "bugs": [
         {
             "line": 1,
-            "bug": "input returns a string, but we use n later into the range function which requires an int. You can use the int function to fix that and use `n = int(input())`",
+            "bug": "input returns a string, but we use n later into the range function \
+which requires an int. You can use the int function to fix that and use \
+`n = int(input())`",
             "hint": "check the way you handle the input"
         }
     ]

@@ -82,16 +82,16 @@ is a more human readable hint that can be used to guide the user to fix the
 bug, without explicitly stating the bug to obviously.
 
 For example, given the following source code
-\`\`\`
+\```
 if __name__ == "__main__":
     n = input()
     for i in range(1, n):
         if i % 2 == 0:
             print(i)
-\`\`\`
+\```
 
 Your output should be:
-\`\`\`
+\```
 {
     "analysis": [
         "The program starts by reading the input from standard input into the variable n.",
@@ -103,12 +103,14 @@ Your output should be:
     "bugs": [
         {
             "line": 1,
-            "bug": "input returns a string, but we use n later into the range function which requires an int. You can use the int function to fix that and use `n = int(input())`",
+            "bug": "input returns a string, but we use n later into the range function \
+which requires an int. You can use the int function to fix that and use \
+`n = int(input())`",
             "hint": "check the way you handle the input"
         }
     ]
 }
-\`\`\`
+\```
 ```
 
 ## ⇁ Vim Config
