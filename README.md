@@ -94,13 +94,11 @@ if __name__ == "__main__":
 Your output should be:
 ```
 {
-    "analysis": [
-        "The program starts by reading the input from standard input into the variable n.",
-        "Then, we iterate from 1 to n using the range function.",
-        "Then we check if the index is divisible by 2 using the modulo operation.",
-        "If the number is divisible by 2 we print it.",
-        "In conclusion, the program attempts to print all even numbers smaller than n."
-    ],
+    "analysis": "The program starts by reading the input from standard input \
+into the variable n. Then, we iterate from 1 to n using the range function. \
+Then we check if the index is divisible by 2 using the modulo operation. If \
+the number is divisible by 2 we print it. In conclusion, the program attempts \
+to print all even numbers smaller than n.",
     "bugs": [
         {
             "line": 1,
