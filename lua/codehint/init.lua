@@ -50,7 +50,10 @@ M.hint = function()
         local bugs = output["bugs"]
         local diagnostics = {}
         for _, bug in ipairs(bugs) do
-            table.insert(diagnostics, makeDiagnostic(M._CodehintConfig.provider, bug))
+            table.insert(
+                diagnostics,
+                makeDiagnostic(M._CodehintConfig.provider, bug)
+            )
         end
 
         local namespace = vim.api.nvim_create_namespace("codehint")
