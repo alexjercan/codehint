@@ -58,6 +58,55 @@ function. The key will be saved on the nvim path at
 `~/.local/share/nvim/.openairc`. You could also set `use_env` to true to use
 the `OPENAI_API_KEY` environment variable.
 
+### Llama 2
+
+In case you want to use an open source alternative you can use the `llama2`
+provider.
+
+```lua
+require("codehint").setup({
+    provider = "llama2",
+})
+```
+
+The `llama2` provider does not take any extra arguments.
+
+Currently, the only way to use llama2 is to setup a wrapper
+server using huggingface's spaces and `gradio_client`. I provide the code for
+it here
+
+```python
+from flask import Flask, request
+from gradio_client import Client
+
+app = Flask(__name__)
+
+
+@app.route("/api/completions", methods=["POST"])
+def completion():
+    data = request.get_json()
+    prompt = data["prompt"]
+
+    client = Client("https://ysharma-explore-llamav2-with-tgi.hf.space/")
+    result = client.predict(prompt, api_name="/chat_1")
+
+    return result
+
+
+if __name__ == "__main__":
+    app.run()
+```
+
+To run the server you need to install the requirements and then run the script
+
+```console
+pip install flask gradio_client
+python main.py
+```
+
+Then you will be able to use the server. Future plans include deploying such a
+server to a hosting service.
+
 ## ⇁ Code Hints
 
 To get the code hints open up the buggy source code file and call the `hint`

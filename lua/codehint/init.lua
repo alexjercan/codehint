@@ -1,18 +1,23 @@
 local OpenAI = require("codehint.openai").OpenAI
+local Llama2 = require("codehint.llama2").Llama2
 
-local function makeDiagnostic(bug)
+local function makeDiagnostic(provider, bug)
     return {
         lnum = bug["line"],
         col = 1,
         end_lnum = bug["line"],
         severity = vim.diagnostic.severity.HINT,
-        message = bug["hint"],
+        message = string.format("[%s] %s", provider, bug["bug"]),
     }
 end
 
 local function generate(prompt, opt)
     if opt.provider == "openai" then
         return OpenAI.generate(prompt, opt.args)
+    end
+
+    if opt.provider == "llama2" then
+        return Llama2.generate(prompt)
     end
 end
 
@@ -45,7 +50,7 @@ M.hint = function()
         local bugs = output["bugs"]
         local diagnostics = {}
         for _, bug in ipairs(bugs) do
-            table.insert(diagnostics, makeDiagnostic(bug))
+            table.insert(diagnostics, makeDiagnostic(M._CodehintConfig.provider, bug))
         end
 
         local namespace = vim.api.nvim_create_namespace("codehint")
