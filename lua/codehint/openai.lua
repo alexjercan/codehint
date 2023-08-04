@@ -84,12 +84,12 @@ local function auth(use_env)
     return get_key()
 end
 
-local function generate_completion(prompt, key, model)
+local function generate_completion(code, key, model)
     local payload = vim.json.encode({
         model = model,
         messages = {
             { role = "system", content = SYSTEM },
-            { role = "user", content = prompt },
+            { role = "user", content = code },
         },
     })
 
@@ -112,10 +112,10 @@ end
 
 local OpenAI = {}
 
-function OpenAI.generate(prompt, opt)
+function OpenAI.generate(code, opt)
     local key = auth(opt.use_env)
 
-    local result = generate_completion(prompt, key, opt.model)
+    local result = generate_completion(code, key, opt.model)
 
     local choices = result["choices"]
     if choices == nil then
