@@ -17,7 +17,7 @@ local function generate(prompt, opt)
     end
 
     if opt.provider == "llama2" then
-        return Llama2.generate(prompt)
+        return Llama2.generate(prompt, opt.args)
     end
 end
 

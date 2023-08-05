@@ -42,17 +42,7 @@ which requires an int. You can use the int function to fix that and use \
 Do NOT use any explanation text except the JSON output.
 ]]
 
-local function generate_completion(code)
-    local prompt = string.format(
-        "<s>[INST] <<SYS>>\n%s\n<</SYS>>\n\n%s[/INST]",
-        SYSTEM,
-        code
-    )
-
-    local payload = vim.json.encode({
-        prompt = prompt,
-    })
-
+local function generate_completion_api(payload)
     local curl = (
         string.format("curl %s", ENDPOINT)
         .. " -H 'Content-Type: application/json'"
@@ -69,10 +59,49 @@ local function generate_completion(code)
     end
 end
 
+local function generate_completion_eval(payload)
+    local python = [[import sys
+from gradio_client import Client
+
+prompt = sys.stdin.read()
+
+client = Client("https://ysharma-explore-llamav2-with-tgi.hf.space/", verbose=False)
+result = client.predict(prompt, api_name="/chat_1")
+
+sys.stdout.write(result)]]
+
+    local handle =
+        io.popen("echo '" .. payload .. "' | python3 -c '" .. python .. "'")
+    if handle ~= nil then
+        local result = handle:read("*a")
+        handle:close()
+
+        return vim.json.decode(result)
+    end
+end
+
+local function generate_completion(code, use_eval)
+    local prompt = string.format(
+        "<s>[INST] <<SYS>>\n%s\n<</SYS>>\n\n%s[/INST]",
+        SYSTEM,
+        code
+    )
+
+    local payload = vim.json.encode({
+        prompt = prompt,
+    })
+
+    if use_eval then
+        return generate_completion_eval(payload)
+    else
+        return generate_completion_api(payload)
+    end
+end
+
 local Llama2 = {}
 
-function Llama2.generate(code)
-    local content = generate_completion(code)
+function Llama2.generate(code, opt)
+    local content = generate_completion(code, opt.use_eval)
 
     return content
 end
